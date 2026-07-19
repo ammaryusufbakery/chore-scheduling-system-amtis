@@ -11,7 +11,7 @@ class Schedule extends Model
 
     protected $fillable = [
         'schedule_date',
-        'day'
+        'day',
     ];
 
     public function assignments()

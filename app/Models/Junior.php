@@ -11,7 +11,7 @@ class Junior extends Model
 
     protected $fillable = [
         'name',
-        'status'
+        'status',
     ];
 
     public function assignments()

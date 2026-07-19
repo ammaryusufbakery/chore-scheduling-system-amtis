@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Chore;
 use App\Models\Junior;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,10 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            ['name' => 'Test User', 'email_verified_at' => now(), 'password' => bcrypt('password')]
-        );
+        Role::firstOrCreate(['name' => 'Admin']);
+        Role::firstOrCreate(['name' => 'Junior']);
 
         $defaultChores = [
             ['chore_name' => 'Open Shutter', 'is_operational' => 1],
@@ -34,6 +33,11 @@ class DatabaseSeeder extends Seeder
             Chore::firstOrCreate(['chore_name' => $chore['chore_name']], $chore);
         }
 
+        User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            ['name' => 'Admin', 'email_verified_at' => now(), 'password' => bcrypt('password'), 'role_id' => Role::where('name', 'Admin')->first()->id]
+        );
+
         foreach (range(1, 5) as $index) {
             Junior::firstOrCreate(
                 ['name' => "Junior {$index}"],
@@ -42,7 +46,7 @@ class DatabaseSeeder extends Seeder
 
             User::firstOrCreate(
                 ['email' => "test{$index}@example.com"],
-                ['name' => "Junior {$index}", 'email_verified_at' => now(), 'password' => bcrypt('password')]
+                ['name' => "Junior {$index}", 'email_verified_at' => now(), 'password' => bcrypt('password'), 'role_id' => Role::where('name', 'Junior')->first()->id]
             );
         }
     }
