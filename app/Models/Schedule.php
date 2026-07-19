@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Schedule extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
 
     protected $fillable = [
         'schedule_date',
