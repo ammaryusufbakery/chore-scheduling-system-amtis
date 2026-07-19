@@ -9,8 +9,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div class="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-200">
                 <div class="px-6 py-5 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-900">Today's Assignments</h2>
-                    <p class="mt-1 text-sm text-gray-600">All tasks assigned for today.</p>
+                    <h2 class="text-xl font-semibold text-gray-900">Today's Tasks</h2>
+                    <p class="mt-1 text-sm text-gray-600">
+                        {{ $junior ? $junior->name : 'Your' }} assigned duties for today.
+                    </p>
                 </div>
 
                 <div class="p-6">
@@ -25,14 +27,14 @@
                                         {{ optional($assignment->chore)->chore_name ?? 'Task' }}
                                     </h3>
                                     <p class="mt-2 text-sm text-gray-600">
-                                        Assigned to {{ optional($assignment->junior)->name ?? 'Unassigned' }}
+                                        Assigned to {{ $junior->name ?? 'you' }} for today.
                                     </p>
                                 </div>
                             @endforeach
                         </div>
                     @else
                         <div class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
-                            No tasks have been assigned for today yet.
+                            No tasks have been assigned to you for today.
                         </div>
                     @endif
                 </div>

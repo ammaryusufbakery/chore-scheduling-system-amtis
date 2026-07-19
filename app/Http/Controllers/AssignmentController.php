@@ -62,6 +62,7 @@ class AssignmentController extends Controller
                     'junior_id' => $chosenJunior->id,
                     'chore_id' => $chore->id,
                     'week' => $week,
+                    'status' => 0,
                 ]);
 
                 $assignedJuniorIds[] = $chosenJunior->id;
@@ -71,6 +72,21 @@ class AssignmentController extends Controller
 
     public function index()
     {
+        if (auth()->user()->role_id === 2) {
+            $assignments = Assignment::with(['schedule', 'junior', 'chore'])
+                ->orderBy('week')
+                ->orderBy('schedule_id')
+                ->orderBy('chore_id')
+                ->get();
+
+            $weeklyAssignments = $assignments->groupBy('week');
+
+            return view('master', compact(
+                'assignments',
+                'weeklyAssignments',
+            ));
+        }
+
         $currentWeek = Carbon::now()->startOfWeek();
 
         $weekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
@@ -105,7 +121,7 @@ class AssignmentController extends Controller
 
         $weeklyAssignments = $assignments->groupBy('week');
 
-        return view('home', compact('assignments', 'weeklyAssignments'));
+        return view('master', compact('assignments', 'weeklyAssignments'));
     }
 
     public function shutter()
@@ -157,12 +173,8 @@ class AssignmentController extends Controller
         return view('shutter', compact(
             'week1Open',
             'week2Open',
-            'week3Open',
-            'week4Open',
             'week1Close',
             'week2Close',
-            'week3Close',
-            'week4Close',
         ));
     }
 
@@ -193,8 +205,6 @@ class AssignmentController extends Controller
         return view('recital', compact(
             'week1',
             'week2',
-            'week3',
-            'week4',
         ));
     }
 
@@ -225,8 +235,6 @@ class AssignmentController extends Controller
         return view('rubbish', compact(
             'week1',
             'week2',
-            'week3',
-            'week4',
         ));
     }
 }

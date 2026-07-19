@@ -18,6 +18,7 @@
             <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
                 <div class="px-6 py-5 border-b border-gray-200">
                     <h2 class="text-xl font-semibold text-gray-900">This Week Overview</h2>
+                    <p class="mt-1 text-sm text-gray-600">This week's overview.</p>
                 </div>
 
                 <div class="p-6 overflow-x-auto">
@@ -58,6 +59,7 @@
             <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
                 <div class="px-6 py-5 border-b border-gray-200">
                     <h2 class="text-xl font-semibold text-gray-900">Next Week Overview</h2>
+                    <p class="mt-1 text-sm text-gray-600">Next week's overview.</p>
                 </div>
 
                 <div class="p-6 overflow-x-auto">
