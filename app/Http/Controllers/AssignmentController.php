@@ -10,11 +10,10 @@ use Illuminate\Support\Carbon;
 
 class AssignmentController extends Controller
 {
-    public function generateWeeklySchedule(Carbon|string $weekStartDate): void
+    public function generateWeeklySchedule(Carbon|string $weekStartDate, int $week): void
     {
         $weekStart = $weekStartDate instanceof Carbon ? $weekStartDate : Carbon::parse($weekStartDate);
         $weekStart = $weekStart->copy()->startOfWeek();
-        $weekNumber = 1;
 
         $juniors = Junior::where('status', 'Active')->orderBy('name')->get();
         $chores = Chore::where('is_operational', 1)->orderBy('id')->get();
@@ -31,7 +30,7 @@ class AssignmentController extends Controller
             }
 
             $assignedJuniorIds = [];
-            $weekAssignments = Assignment::where('week', $weekNumber)
+            $weekAssignments = Assignment::where('week', $week)
                 ->with('junior')
                 ->get();
 
@@ -62,7 +61,7 @@ class AssignmentController extends Controller
                     'schedule_id' => $schedule->id,
                     'junior_id' => $chosenJunior->id,
                     'chore_id' => $chore->id,
-                    'week' => $weekNumber,
+                    'week' => $week,
                 ]);
 
                 $assignedJuniorIds[] = $chosenJunior->id;
@@ -73,12 +72,29 @@ class AssignmentController extends Controller
     public function index()
     {
         $currentWeek = Carbon::now()->startOfWeek();
+
         $weekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
             $query->whereBetween('schedule_date', [$currentWeek->toDateString(), $currentWeek->copy()->endOfWeek()->toDateString()]);
         })->exists();
 
         if (! $weekHasAssignments) {
-            $this->generateWeeklySchedule($currentWeek);
+            $this->generateWeeklySchedule($currentWeek, 1);
+        } else {
+            $weekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
+                $query->whereBetween('schedule_date', [$currentWeek->toDateString(), $currentWeek->copy()->endOfWeek()->toDateString()]);
+            })->update([
+                    'week' => 1,
+                ]);
+            };
+
+        $nextWeek = $currentWeek->copy()->addWeek();
+
+        $nextWeekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($nextWeek) {
+            $query->whereBetween('schedule_date', [$nextWeek->toDateString(), $nextWeek->copy()->endOfWeek()->toDateString()]);
+        })->exists();
+
+        if (! $nextWeekHasAssignments) {
+            $this->generateWeeklySchedule($nextWeek, 2);
         }
 
         $assignments = Assignment::with(['schedule', 'junior', 'chore'])
