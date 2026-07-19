@@ -140,16 +140,6 @@ class AssignmentController extends Controller
             ->where('week', 2)
             ->get();
 
-        $week3Open = Assignment::with('junior')
-            ->where('chore_id', $openShutterChoreId)
-            ->where('week', 3)
-            ->get();
-
-        $week4Open = Assignment::with('junior')
-            ->where('chore_id', $openShutterChoreId)
-            ->where('week', 4)
-            ->get();
-
         $week1Close = Assignment::with('junior')
             ->where('chore_id', $closeShutterChoreId)
             ->where('week', 1)
@@ -158,16 +148,6 @@ class AssignmentController extends Controller
         $week2Close = Assignment::with('junior')
             ->where('chore_id', $closeShutterChoreId)
             ->where('week', 2)
-            ->get();
-
-        $week3Close = Assignment::with('junior')
-            ->where('chore_id', $closeShutterChoreId)
-            ->where('week', 3)
-            ->get();
-
-        $week4Close = Assignment::with('junior')
-            ->where('chore_id', $closeShutterChoreId)
-            ->where('week', 4)
             ->get();
 
         return view('shutter', compact(
@@ -192,16 +172,6 @@ class AssignmentController extends Controller
             ->where('week', 2)
             ->get();
 
-        $week3 = Assignment::with('junior')
-            ->where('chore_id', $recitalChoreId)
-            ->where('week', 3)
-            ->get();
-
-        $week4 = Assignment::with('junior')
-            ->where('chore_id', $recitalChoreId)
-            ->where('week', 4)
-            ->get();
-
         return view('recital', compact(
             'week1',
             'week2',
@@ -220,16 +190,6 @@ class AssignmentController extends Controller
         $week2 = Assignment::with('junior')
             ->where('chore_id', $rubbishChoreId)
             ->where('week', 2)
-            ->get();
-
-        $week3 = Assignment::with('junior')
-            ->where('chore_id', $rubbishChoreId)
-            ->where('week', 3)
-            ->get();
-
-        $week4 = Assignment::with('junior')
-            ->where('chore_id', $rubbishChoreId)
-            ->where('week', 4)
             ->get();
 
         return view('rubbish', compact(
