@@ -6,110 +6,135 @@ use App\Models\Assignment;
 use App\Models\Chore;
 use App\Models\Junior;
 use App\Models\Schedule;
-use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class AssignmentController extends Controller
 {
-    public function generateAssignment($date, $week)
+    public function generateWeeklySchedule(Carbon|string $weekStartDate): void
     {
-        $juniors = Junior::where('status', 'Active')
-            ->get();
+        $weekStart = $weekStartDate instanceof Carbon ? $weekStartDate : Carbon::parse($weekStartDate);
+        $weekStart = $weekStart->copy()->startOfWeek();
+        $weekNumber = 1;
 
-        $chores = Chore::where('is_operational', 1)
-            ->get();
+        $juniors = Junior::where('status', 'Active')->orderBy('name')->get();
+        $chores = Chore::where('is_operational', 1)->orderBy('id')->get();
 
-        $schedules = Schedule::firstOrCreate([
-            'schedule_date' => $date,
-            'day' => $date //recheck
-        ]);
-
-        foreach ($chores as $chore) {
-            // Find the intern who has done this specific task the LEAST number of times
-            // and hasn't been assigned a task yet TODAY
-            $chosenJunior = $juniors->sortBy(function ($junior) use ($chore) {
-                return $junior->assignments()->where('chore_id', $chore->id)->count();
-            })->first();
-
-            Assignment::create([
-                'schedule_id' => $schedules->id,
-                'junior_id' => $chosenJunior->id,
-                'chore_id' => $chore->id,
-                'week' => $week
+        for ($dayOffset = 0; $dayOffset < 5; $dayOffset++) {
+            $scheduleDate = $weekStart->copy()->addDays($dayOffset);
+            $schedule = Schedule::firstOrCreate([
+                'schedule_date' => $scheduleDate->toDateString(),
+                'day' => $scheduleDate->translatedFormat('l'),
             ]);
 
-            // Remove this intern from the daily pool so they don't get double-booked
-            $juniors = $juniors->reject(fn($i) => $i->id === $chosenJunior->id);
-        }
+            if ($schedule->assignments()->exists()) {
+                continue;
+            }
 
-        // Anyone left over gets "Off-Duty" automatically
-        $offDuty = Chore::where('is_operational', 0)->first();
+            $assignedJuniorIds = [];
+            $weekAssignments = Assignment::where('week', $weekNumber)
+                ->with('junior')
+                ->get();
 
-        foreach ($juniors as $remainingJunior) {
-            Assignment::create([
-                'schedule_id' => $schedules->id,
-                'junior_id' => $remainingJunior->id,
-                'chore_id' => $offDuty->id,
-                'week' => $week
-            ]);
+            foreach ($chores as $chore) {
+                $availableJuniors = $juniors->filter(function ($junior) use ($assignedJuniorIds, $weekAssignments, $chore) {
+                    if (in_array($junior->id, $assignedJuniorIds, true)) {
+                        return false;
+                    }
+
+                    $alreadyAssignedForThisChoreThisWeek = $weekAssignments->contains(function ($assignment) use ($junior, $chore) {
+                        return $assignment->junior_id === $junior->id && $assignment->chore_id === $chore->id;
+                    });
+
+                    return ! $alreadyAssignedForThisChoreThisWeek;
+                });
+
+                if ($availableJuniors->isEmpty()) {
+                    $availableJuniors = $juniors->filter(fn ($junior) => ! in_array($junior->id, $assignedJuniorIds, true));
+                }
+
+                if ($availableJuniors->isEmpty()) {
+                    continue;
+                }
+
+                $chosenJunior = $availableJuniors->random();
+
+                Assignment::create([
+                    'schedule_id' => $schedule->id,
+                    'junior_id' => $chosenJunior->id,
+                    'chore_id' => $chore->id,
+                    'week' => $weekNumber,
+                ]);
+
+                $assignedJuniorIds[] = $chosenJunior->id;
+            }
         }
     }
 
     public function index()
     {
-        // $date = Schedule::orderByDesc('schedule_date')
-        //     ->value('schedule_date');
+        $currentWeek = Carbon::now()->startOfWeek();
+        $weekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
+            $query->whereBetween('schedule_date', [$currentWeek->toDateString(), $currentWeek->copy()->endOfWeek()->toDateString()]);
+        })->exists();
 
-        // $date = $date ? $date->nextWeekday():today()->startOfWeek();
+        if (! $weekHasAssignments) {
+            $this->generateWeeklySchedule($currentWeek);
+        }
 
-        // for($week=1; $week<5; $week++){
-        //     for($i=0; $i<5; $i++){
-        //         $this->generateAssignment($date, $week);
-        //         $date->nextWeekday();
-        //     }
-        // }
+        $assignments = Assignment::with(['schedule', 'junior', 'chore'])
+            ->orderBy('week')
+            ->orderBy('schedule_id')
+            ->orderBy('chore_id')
+            ->get();
 
-        return view('home', compact('assignments'));
+        $weeklyAssignments = $assignments->groupBy('week');
+
+        return view('home', compact('assignments', 'weeklyAssignments'));
     }
 
     public function shutter()
     {
+        $openShutterChoreId = Chore::where('chore_name', 'Open Shutter')->value('id');
+        $closeShutterChoreId = Chore::where('chore_name', 'Close Shutter')->value('id');
+        $offDutyChoreId = Chore::where('chore_name', 'Off Duty')->value('id');
+
         $week1Open = Assignment::with('junior')
-            ->where('chore_id', 1)
+            ->where('chore_id', $openShutterChoreId)
             ->where('week', 1)
             ->get();
-        
+
         $week2Open = Assignment::with('junior')
-            ->where('chore_id', 1)
+            ->where('chore_id', $openShutterChoreId)
             ->where('week', 2)
             ->get();
 
         $week3Open = Assignment::with('junior')
-            ->where('chore_id', 1)
+            ->where('chore_id', $openShutterChoreId)
             ->where('week', 3)
             ->get();
 
         $week4Open = Assignment::with('junior')
-            ->where('chore_id', 1)
+            ->where('chore_id', $openShutterChoreId)
             ->where('week', 4)
             ->get();
 
         $week1Close = Assignment::with('junior')
-            ->where('chore_id', 4)
+            ->where('chore_id', $closeShutterChoreId)
             ->where('week', 1)
             ->get();
-        
+
         $week2Close = Assignment::with('junior')
-            ->where('chore_id', 4)
+            ->where('chore_id', $closeShutterChoreId)
             ->where('week', 2)
             ->get();
 
         $week3Close = Assignment::with('junior')
-            ->where('chore_id', 4)
+            ->where('chore_id', $closeShutterChoreId)
             ->where('week', 3)
             ->get();
 
         $week4Close = Assignment::with('junior')
-            ->where('chore_id', 4)
+            ->where('chore_id', $closeShutterChoreId)
             ->where('week', 4)
             ->get();
 
@@ -127,23 +152,25 @@ class AssignmentController extends Controller
 
     public function recital()
     {
+        $recitalChoreId = Chore::where('chore_name', 'Yasin Recital')->value('id');
+
         $week1 = Assignment::with('junior')
-            ->where('chore_id', 2)
+            ->where('chore_id', $recitalChoreId)
             ->where('week', 1)
             ->get();
-        
+
         $week2 = Assignment::with('junior')
-            ->where('chore_id', 2)
+            ->where('chore_id', $recitalChoreId)
             ->where('week', 2)
             ->get();
 
         $week3 = Assignment::with('junior')
-            ->where('chore_id', 2)
+            ->where('chore_id', $recitalChoreId)
             ->where('week', 3)
             ->get();
 
         $week4 = Assignment::with('junior')
-            ->where('chore_id', 2)
+            ->where('chore_id', $recitalChoreId)
             ->where('week', 4)
             ->get();
 
@@ -157,23 +184,25 @@ class AssignmentController extends Controller
 
     public function rubbish()
     {
+        $rubbishChoreId = Chore::where('chore_name', 'Throw Rubbish')->value('id');
+
         $week1 = Assignment::with('junior')
-            ->where('chore_id', 3)
+            ->where('chore_id', $rubbishChoreId)
             ->where('week', 1)
             ->get();
-        
+
         $week2 = Assignment::with('junior')
-            ->where('chore_id', 3)
+            ->where('chore_id', $rubbishChoreId)
             ->where('week', 2)
             ->get();
 
         $week3 = Assignment::with('junior')
-            ->where('chore_id', 3)
+            ->where('chore_id', $rubbishChoreId)
             ->where('week', 3)
             ->get();
 
         $week4 = Assignment::with('junior')
-            ->where('chore_id', 3)
+            ->where('chore_id', $rubbishChoreId)
             ->where('week', 4)
             ->get();
 
