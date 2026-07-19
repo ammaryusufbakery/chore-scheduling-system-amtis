@@ -38,6 +38,6 @@ class DashboardController extends Controller
             ->with(['chore', 'schedule', 'junior'])
             ->get();
 
-        return view('dashboard', compact('todayAssignments'));
+        return view('admin.dashboard', compact('todayAssignments'));
     }
 }

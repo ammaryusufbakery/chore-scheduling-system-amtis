@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/shutter', [AssignmentController::class, 'shutter'])->name('shutter');
     Route::get('/recital', [AssignmentController::class, 'recital'])->name('recital');
     Route::get('/rubbish', [AssignmentController::class, 'rubbish'])->name('rubbish');
+    
     Route::post('/junior/{assignment}/done', [AssignmentController::class, 'markAsDone'])->name('done');
     Route::post('/junior/{assignment}/swap', [AssignmentController::class, 'swapAssignment'])->name('swap');
     Route::post('/junior/{assignment}/swap/confirm', [AssignmentController::class, 'confirmSwap'])->name('swap.confirm');
