@@ -204,4 +204,33 @@ class AssignmentController extends Controller
 
         return redirect()->back()->with('success', 'Task marked as done.');
     }
+
+    public function swapAssignment(Assignment $assignment)
+    {
+        $currentJuniorId = $assignment->junior_id;
+
+        $availableJuniors = Junior::where('status', 'Active')
+            ->where('id', '!=', $currentJuniorId)
+            ->get();
+
+        if ($availableJuniors->isEmpty()) {
+            return redirect()->back()->with('error', 'No available juniors to swap with.');
+        }
+
+        return view('junior.swap', compact('assignment', 'availableJuniors'));
+    }
+
+    public function confirmSwap(Assignment $assignment)
+    {
+        $request = request();
+        $newJuniorId = $request->input('junior_id');
+
+        if (! $newJuniorId) {
+            return redirect()->back()->with('error', 'Please select a junior.');
+        }
+
+        $assignment->update(['junior_id' => $newJuniorId]);
+
+        return redirect()->route('junior-dashboard')->with('success', 'Assignment swapped successfully.');
+    }
 }

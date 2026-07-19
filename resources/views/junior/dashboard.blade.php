@@ -36,6 +36,13 @@
                                                 Mark as Done
                                             </button>
                                         </form>
+
+                                        <form action="{{ route('swap', $assignment) }}" method="POST" class="mt-4">
+                                            @csrf
+                                            <button type="submit" class="rounded-md bg-yellow-600 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-700">
+                                                Swap Assignment
+                                            </button>
+                                        </form>
                                     @else
                                         <p class="mt-4 text-sm font-medium text-green-700">This task has already been completed.</p>
                                     @endif
