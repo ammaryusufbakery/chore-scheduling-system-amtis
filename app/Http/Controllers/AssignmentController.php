@@ -96,8 +96,6 @@ class AssignmentController extends Controller
         if (! $weekHasAssignments) {
             $this->generateWeeklySchedule($currentWeek, 1);
         } else {
-            Assignment::where('week', 1)->delete();
-
             $weekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
                 $query->whereBetween('schedule_date', [$currentWeek->toDateString(), $currentWeek->copy()->endOfWeek()->toDateString()]);
             })->update([
