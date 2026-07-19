@@ -17,13 +17,15 @@
                     @if ($todayAssignments->isNotEmpty())
                         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                             @foreach ($todayAssignments as $assignment)
-                                <div class="rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
-                                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                        {{ optional($assignment->schedule)->day ?? 'Today' }}
-                                    </p>
-                                    <h3 class="mt-2 text-lg font-semibold text-gray-900">
-                                        {{ optional($assignment->chore)->chore_name ?? 'Task' }}
-                                    </h3>
+                                <div class="rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm {{ $assignment->status === 1 ? 'border-green-400 bg-green-50' : '' }}">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <h3 class="text-lg font-semibold text-gray-900">
+                                            {{ optional($assignment->chore)->chore_name ?? 'Task' }}
+                                        </h3>
+                                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $assignment->status === 1 ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                                            {{ $assignment->status === 1 ? 'Done' : 'Pending' }}
+                                        </span>
+                                    </div>
                                     <p class="mt-2 text-sm text-gray-600">
                                         Assigned to {{ optional($assignment->junior)->name ?? 'Unassigned' }}
                                     </p>

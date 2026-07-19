@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/shutter', [AssignmentController::class, 'shutter'])->name('shutter');
     Route::get('/recital', [AssignmentController::class, 'recital'])->name('recital');
     Route::get('/rubbish', [AssignmentController::class, 'rubbish'])->name('rubbish');
+    Route::post('/junior/{assignment}/done', [AssignmentController::class, 'markAsDone'])->name('done');
 });
 
 require __DIR__.'/auth.php';

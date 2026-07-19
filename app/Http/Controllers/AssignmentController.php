@@ -197,4 +197,11 @@ class AssignmentController extends Controller
             'week2',
         ));
     }
+
+    public function markAsDone(Assignment $assignment)
+    {
+        $assignment->update(['status' => 1]);
+
+        return redirect()->back()->with('success', 'Task marked as done.');
+    }
 }

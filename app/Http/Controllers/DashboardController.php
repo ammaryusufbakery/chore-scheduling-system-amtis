@@ -20,6 +20,7 @@ class DashboardController extends Controller
                 $today = Carbon::now()->toDateString();
 
                 $todayAssignments = Assignment::where('junior_id', $junior->id)
+                    //->where('status', 0)
                     ->whereHas('schedule', function ($query) use ($today) {
                         $query->where('schedule_date', $today);
                     })
