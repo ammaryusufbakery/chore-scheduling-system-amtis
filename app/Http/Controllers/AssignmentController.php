@@ -89,6 +89,12 @@ class AssignmentController extends Controller
 
         $currentWeek = Carbon::now()->startOfWeek();
 
+        Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
+            $query->where('schedule_date', '<', $currentWeek->toDateString());
+        })->delete();
+
+        Schedule::where('schedule_date', '<', $currentWeek->toDateString())->delete();
+
         $weekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
             $query->whereBetween('schedule_date', [$currentWeek->toDateString(), $currentWeek->copy()->endOfWeek()->toDateString()]);
         })->exists();
@@ -96,9 +102,11 @@ class AssignmentController extends Controller
         if (! $weekHasAssignments) {
             $this->generateWeeklySchedule($currentWeek, 1);
         } else {
-            $weekHasAssignments = Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
+            Assignment::whereHas('schedule', function ($query) use ($currentWeek) {
                 $query->whereBetween('schedule_date', [$currentWeek->toDateString(), $currentWeek->copy()->endOfWeek()->toDateString()]);
-            })->update([
+            })
+                ->where('week', '!=', 1)
+                ->update([
                     'week' => 1,
                 ]);
             };
