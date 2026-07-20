@@ -19,11 +19,11 @@ return [
     */
 
     'manifest' => [
-        'name' => 'Amtis Junior Chore Schedules',
-        'short_name' => 'LPT',
+        'name' => 'Laravel PWA',
+        'short_name' => 'CSS',
         'background_color' => '#6777ef',
         'display' => 'fullscreen',
-        'description' => 'A Chore Scheduling System for Amtis Solution Juniors',
+        'description' => 'A Progressive Web Application setup for Laravel projects.',
         'theme_color' => '#6777ef',
         'icons' => [
             [
