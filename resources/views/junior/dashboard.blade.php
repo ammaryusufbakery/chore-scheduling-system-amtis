@@ -39,7 +39,7 @@
 
                                         <form action="{{ route('swap', $assignment) }}" method="POST" class="mt-3">
                                             @csrf
-                                            <button type="submit" class="w-full rounded-md bg-yellow-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-yellow-700 sm:w-auto">
+                                            <button type="submit" class="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto">
                                                 Swap Assignment
                                             </button>
                                         </form>
