@@ -5,22 +5,17 @@
             <div class="flex items-center">
                 <!-- Logo -->
                 <div class="flex shrink-0 items-center">
-                    <a href="{{ route('junior-dashboard') }}">
+                    <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-6 sm:-my-px sm:ms-8 sm:flex">
-                    @if (auth()->user()->role_id === 2)
-                        <x-nav-link :href="route('junior-dashboard')" :active="request()->routeIs('junior-dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    @else
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    @endif
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard', 'swap')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+
                     <x-nav-link :href="route('master')" :active="request()->routeIs('master')">
                         {{ __('Master') }}
                     </x-nav-link>
@@ -88,15 +83,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="space-y-1 pb-3 pt-2">
-            @if (auth()->user()->role_id === 2)
-                <x-responsive-nav-link :href="route('junior-dashboard')" :active="request()->routeIs('junior-dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-            @else
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-            @endif
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard', 'swap')">
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('master')" :active="request()->routeIs('master')">
                 {{ __('Master') }}
             </x-responsive-nav-link>

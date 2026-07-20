@@ -70,7 +70,7 @@ class AssignmentController extends Controller
         }
     }
 
-    public function index()
+    public function master()
     {
         if (auth()->user()->role_id === 2) {
             $assignments = Assignment::with(['schedule', 'junior', 'chore'])
@@ -239,6 +239,6 @@ class AssignmentController extends Controller
 
         $assignment->update(['junior_id' => $newJuniorId]);
 
-        return redirect()->route('junior-dashboard')->with('success', 'Assignment swapped successfully.');
+        return redirect()->route('dashboard')->with('success', 'Assignment swapped successfully.');
     }
 }

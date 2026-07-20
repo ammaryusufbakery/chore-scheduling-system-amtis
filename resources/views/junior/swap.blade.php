@@ -36,7 +36,7 @@
                             </div>
 
                             <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-                                <a href="{{ route('junior-dashboard') }}" class="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 sm:w-auto">
+                                <a href="{{ route('dashboard') }}" class="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 sm:w-auto">
                                     Back
                                 </a>
                                 <button type="submit" class="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto">

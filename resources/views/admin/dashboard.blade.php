@@ -29,6 +29,17 @@
                                     <p class="mt-2 text-sm text-gray-600">
                                         Assigned to {{ optional($assignment->junior)->name ?? 'Unassigned' }}
                                     </p>
+
+                                    @if ($assignment->status !== 1)
+                                        <form action="{{ route('done', $assignment) }}" method="POST" class="mt-4 space-y-3">
+                                            @csrf
+                                            <button type="submit" class="w-full rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700 sm:w-auto">
+                                                Mark as Done
+                                            </button>
+                                        </form>
+                                    @else
+                                        <p class="mt-4 text-sm font-medium text-green-700">This task has already been completed.</p>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
