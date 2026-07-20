@@ -15,12 +15,14 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::middleware('junior')->group(function () {
+        //Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
         Route::post('/junior/{assignment}/swap', [AssignmentController::class, 'swapAssignment'])->name('swap');
         Route::post('/junior/{assignment}/swap/confirm', [AssignmentController::class, 'confirmSwap'])->name('swap.confirm');
     });
 
     Route::middleware('admin')->group(function () {
-        //
+        //Route::get('admin/dashboard', [DashboardController::class, 'adminIndex'])->name('admin-dashboard');
     });
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
