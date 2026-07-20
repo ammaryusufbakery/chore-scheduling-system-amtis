@@ -10,6 +10,7 @@
     </header>
 
     <x-danger-button
+        class="w-full justify-center sm:w-auto"
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
     >{{ __('Delete Account') }}</x-danger-button>
@@ -41,12 +42,12 @@
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
+            <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
+                <x-secondary-button x-on:click="$dispatch('close')" class="w-full justify-center sm:w-auto">
                     {{ __('Cancel') }}
                 </x-secondary-button>
 
-                <x-danger-button class="ms-3">
+                <x-danger-button class="w-full justify-center sm:w-auto sm:ms-3">
                     {{ __('Delete Account') }}
                 </x-danger-button>
             </div>

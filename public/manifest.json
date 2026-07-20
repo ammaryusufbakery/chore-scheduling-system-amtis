@@ -2,10 +2,10 @@
     "name": "Junior Chore Schedule",
     "short_name": "JCS",
     "background_color": "#6777ef",
-    "display": "fullscreen",
+    "display": "standalone",
     "description": "Chore Scheduling System for Amtis Solution Juniors",
     "theme_color": "#6777ef",
-    "start_url": "/chore-scheduling-system-amtis/public/",
+    "start_url": "/",
     "icons": [
         {
             "src": "logo.png",
