@@ -11,11 +11,27 @@ class Junior extends Model
 
     protected $fillable = [
         'name',
+        'gender',
+        'start_date',
+        'end_date',
+        'preferences',
         'status',
     ];
+
+    protected function casts()
+    {
+        return [
+            'preferences' => 'array',
+        ];
+    }
 
     public function assignments()
     {
         return $this->hasMany(Assignment::class);
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
     }
 }

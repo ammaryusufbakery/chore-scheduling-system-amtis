@@ -29,7 +29,7 @@ class DashboardController extends Controller
                     ->get();
             }
 
-            return view('junior.dashboard', compact('todayAssignments', 'junior'));
+            return view('dashboard.junior', compact('todayAssignments', 'junior'));
         }
 
         $currentWeek = Carbon::now()->startOfWeek();
@@ -73,7 +73,7 @@ class DashboardController extends Controller
             ->with(['chore', 'schedule', 'junior'])
             ->get();
 
-        return view('admin.dashboard', compact('todayAssignments'));
+        return view('dashboard.admin', compact('todayAssignments'));
     }
 
     public function generateWeeklySchedule(Carbon|string $weekStartDate, int $week): void

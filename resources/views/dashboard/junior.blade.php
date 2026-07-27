@@ -9,8 +9,10 @@
         <div class="mx-auto max-w-7xl space-y-6 px-3 sm:px-6 lg:px-8">
             <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
                 <div class="border-b border-gray-200 px-4 py-4 sm:px-6 sm:py-5">
-                    <h2 class="text-lg font-semibold text-gray-900 sm:text-xl">Today's Assignments</h2>
-                    <p class="mt-1 text-sm text-gray-600">All tasks assigned for today.</p>
+                    <h2 class="text-lg font-semibold text-gray-900 sm:text-xl">Today's Tasks</h2>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Your assigned duties for today.
+                    </p>
                 </div>
 
                 <div class="p-3 sm:p-6">
@@ -26,15 +28,23 @@
                                             {{ $assignment->status === 1 ? 'Done' : 'Pending' }}
                                         </span>
                                     </div>
-                                    <p class="mt-2 text-sm text-gray-600">
-                                        Assigned to {{ optional($assignment->junior)->name ?? 'Unassigned' }}
-                                    </p>
 
                                     @if ($assignment->status !== 1)
+                                        <p class="mt-2 text-sm text-gray-600">
+                                            {{ $assignment->chore->start_time }} - {{ $assignment->chore->end_time }}
+                                        </p>
+                                        
                                         <form action="{{ route('done', $assignment) }}" method="POST" class="mt-4 space-y-3">
                                             @csrf
                                             <button type="submit" class="w-full rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700 sm:w-auto">
-                                                Mark as Done
+                                                Done
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('swap', $assignment) }}" method="POST" class="mt-3">
+                                            @csrf
+                                            <button type="submit" class="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto">
+                                                Swap
                                             </button>
                                         </form>
                                     @else
@@ -45,7 +55,7 @@
                         </div>
                     @else
                         <div class="rounded-lg border border-dashed border-gray-300 p-5 text-center text-sm text-gray-500 sm:p-6">
-                            No tasks have been assigned for today yet.
+                            No tasks have been assigned to you for today.
                         </div>
                     @endif
                 </div>

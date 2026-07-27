@@ -31,6 +31,13 @@
                     <x-nav-link :href="route('rubbish')" :active="request()->routeIs('rubbish')">
                         {{ __('Rubbish') }}
                     </x-nav-link>
+
+                    @if (auth()->user()->role_id == 1)
+                        <x-nav-link :href="route('juniors.index')" 
+                        :active="request()->routeIs('juniors.index', 'juniors.create', 'juniors.show', 'juniors.edit')">
+                            {{ __('Juniors') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -98,6 +105,12 @@
             <x-responsive-nav-link :href="route('rubbish')" :active="request()->routeIs('rubbish')">
                 {{ __('Rubbish') }}
             </x-responsive-nav-link>
+            @if (auth()->user()->role_id == 1)
+                <x-responsive-nav-link :href="route('juniors.index')" 
+                :active="request()->routeIs('juniors.index', 'juniors.create', 'juniors.show', 'juniors.edit')">
+                    {{ __('Juniors') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

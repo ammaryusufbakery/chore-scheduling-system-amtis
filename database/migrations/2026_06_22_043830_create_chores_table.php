@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('chore_name');
             $table->boolean('is_operational');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

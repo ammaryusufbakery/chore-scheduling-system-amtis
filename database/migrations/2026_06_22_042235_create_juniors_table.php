@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('juniors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->enum('gender', ['Male', 'Female']);
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->json('preferences')->nullable();
             $table->enum('status', ['Active', 'Inactive']);
             $table->timestamps();
             $table->softDeletes();

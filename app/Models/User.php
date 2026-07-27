@@ -7,10 +7,11 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role_id'])]
+#[Fillable(['junior_id', 'role_id', 'name', 'email', 'email_verified_at', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -30,8 +31,15 @@ class User extends Authenticatable
         ];
     }
 
+    use SoftDeletes;
+
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function junior()
+    {
+        return $this->belongsTo(Junior::class);
     }
 }

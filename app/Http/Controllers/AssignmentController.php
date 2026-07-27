@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Chore;
 use App\Models\Junior;
-use App\Models\Schedule;
-use Illuminate\Support\Carbon;
 
 class AssignmentController extends Controller
 {
@@ -21,7 +19,7 @@ class AssignmentController extends Controller
 
             $weeklyAssignments = $assignments->groupBy('week');
 
-            return view('master', compact(
+            return view('assignment.master', compact(
                 'assignments',
                 'weeklyAssignments',
             ));
@@ -35,7 +33,7 @@ class AssignmentController extends Controller
 
         $weeklyAssignments = $assignments->groupBy('week');
 
-        return view('master', compact('assignments', 'weeklyAssignments'));
+        return view('assignment.master', compact('assignments', 'weeklyAssignments'));
     }
 
     public function shutter()
@@ -64,7 +62,7 @@ class AssignmentController extends Controller
             ->where('week', 2)
             ->get();
 
-        return view('shutter', compact(
+        return view('assignment.shutter', compact(
             'week1Open',
             'week2Open',
             'week1Close',
@@ -86,7 +84,7 @@ class AssignmentController extends Controller
             ->where('week', 2)
             ->get();
 
-        return view('recital', compact(
+        return view('assignment.recital', compact(
             'week1',
             'week2',
         ));
@@ -106,7 +104,7 @@ class AssignmentController extends Controller
             ->where('week', 2)
             ->get();
 
-        return view('rubbish', compact(
+        return view('assignment.rubbish', compact(
             'week1',
             'week2',
         ));
@@ -131,7 +129,7 @@ class AssignmentController extends Controller
             return redirect()->back()->with('error', 'No available juniors to swap with.');
         }
 
-        return view('junior.swap', compact('assignment', 'availableJuniors'));
+        return view('assignment.swap', compact('assignment', 'availableJuniors'));
     }
 
     public function confirmSwap(Assignment $assignment)

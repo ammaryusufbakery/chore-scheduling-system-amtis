@@ -12,6 +12,8 @@ class Chore extends Model
     protected $fillable = [
         'chore_name',
         'is_operational',
+        'start_time',
+        'end_time',
     ];
 
     public function assignments()
