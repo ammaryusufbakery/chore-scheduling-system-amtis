@@ -12,7 +12,7 @@ class JuniorController extends Controller
 {
     public function index()
     {
-        $juniors = Junior::get();
+        $juniors = Junior::paginate(5);
 
         return view('junior.index', compact('juniors'));
     }

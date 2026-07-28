@@ -106,6 +106,7 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        {{ $juniors->links() }}
                     </div>
                 </div>
             </div>
