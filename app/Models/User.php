@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['junior_id', 'role_id', 'name', 'email', 'email_verified_at', 'password'])]
+#[Fillable(['junior_id', 'role_id', 'name', 'email', 'email_verified_at', 'password', 'fcm_token',])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -41,5 +41,10 @@ class User extends Authenticatable
     public function junior()
     {
         return $this->belongsTo(Junior::class);
+    }
+
+    public function fcmTokens()
+    {
+        return $this->hasMany(FcmToken::class);
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JuniorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -42,6 +43,28 @@ Route::middleware('auth')->group(function () {
     Route::post('/assignments/{assignment}/done', [AssignmentController::class, 'markAsDone'])->name('done');
     Route::post('/assignments/{assignment}/swap', [AssignmentController::class, 'swapAssignment'])->name('swap');
     Route::post('/assignments/{assignment}/swap/confirm', [AssignmentController::class, 'confirmSwap'])->name('swap.confirm');
+
+    Route::post('/api/fcm-token', function (Request $request) {
+
+        $request->validate([
+            'token' => 'required|string',
+        ]);
+
+        $request->user()
+            ->fcmTokens()
+            ->updateOrCreate(
+                [
+                    'token' => $request->token,
+                ],
+                [
+                    'token' => $request->token,
+                ]
+            );
+
+        return response()->json([
+            'success' => true,
+        ]);
+    });
 });
 
 require __DIR__.'/auth.php';

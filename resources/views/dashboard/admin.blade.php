@@ -3,6 +3,13 @@
         <h2 class="text-xl font-semibold leading-tight text-gray-800 sm:text-2xl">
             {{ __('Dashboard') }}
         </h2>
+        <button
+            id="enable-notifications"
+            type="button"
+            class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+            Enable Notifications
+        </button>
     </x-slot>
 
     <div class="py-4 sm:py-8">
