@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
             ->updateOrCreate(
                 [
                     'token' => $request->token,
-                    // 'user_id' => Auth()->user()->id,
+                    // 'user_id' => auth()->user()->id,
                 ],
                 [
                     'token' => $request->token,

@@ -14,23 +14,23 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 // Background notification handler (When PWA is closed)
-messaging.onBackgroundMessage(function(payload) {
+// messaging.onBackgroundMessage(function(payload) {
 
-    console.log(
-        "[firebase-messaging-sw.js] Received background message",
-        payload
-    );
+//     console.log(
+//         "[firebase-messaging-sw.js] Received background message",
+//         payload
+//     );
 
-    const notificationTitle =
-        payload.notification?.title || "New Notification";
+//     const notificationTitle =
+//         payload.notification?.title || "New Notification";
 
-    const notificationOptions = {
-        body: payload.notification?.body || "",
-        icon: "/public/logo.png"
-    };
+//     const notificationOptions = {
+//         body: payload.notification?.body || "",
+//         icon: "/public/logo.png"
+//     };
 
-    self.registration.showNotification(
-        notificationTitle,
-        notificationOptions
-    );
-});
+//     self.registration.showNotification(
+//         notificationTitle,
+//         notificationOptions
+//     );
+// });
