@@ -1,15 +1,32 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800 sm:text-2xl">
-            {{ __('Dashboard') }}
-        </h2>
-        <button
-            id="enable-notifications"
-            type="button"
-            class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-        >
-            Enable Notifications
-        </button>
+        <div class="flex items-center justify-between gap-3">
+            <h2 class="text-xl font-semibold leading-tight text-gray-800 sm:text-2xl">
+                {{ __('Dashboard') }}
+            </h2>
+            <button
+                id="enable-notifications"
+                type="button"
+                class="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                </svg>
+
+                <span>Enable Notifications</span>
+            </button>
+        </div>
     </x-slot>
 
     <div class="py-4 sm:py-8">
