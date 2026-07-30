@@ -44,10 +44,43 @@ class SendUpcomingTaskNotifications extends Command
                 $assignment->chore->start_time
             );
 
+            $endTime = Carbon::parse(
+                $assignment->chore->end_time
+            );
+
             if (
                 $startTime->between(
                     $now,
                     $notificationTime
+                ) && $assignment->notification_sent == 0
+            ) {
+
+                $user = $assignment->junior->user;
+
+                if (!$user) {
+                    continue;
+                }
+
+                foreach ($user->fcmTokens as $fcmToken) {
+
+                    $firebase->send(
+                        $fcmToken->token,
+                        $assignment->chore->chore_name,
+                        'Your chore for today is "' .
+                        $assignment->chore->chore_name .
+                        '". Don\'t forget to complete it.'
+                    );
+
+                }
+
+                $assignment->update([
+                    'notification_sent' => 1,
+                ]);
+            }
+
+            if (
+                $endTime->isBefore(
+                    $now
                 )
             ) {
 
@@ -61,20 +94,13 @@ class SendUpcomingTaskNotifications extends Command
 
                     $firebase->send(
                         $fcmToken->token,
-                        'Upcoming Task',
+                        $assignment->chore->chore_name,
                         'Your "' .
                         $assignment->chore->chore_name .
-                        '" task starts in 10 minutes.'
+                        '" chore is overdue!'
                     );
 
                 }
-
-                $notification_sent = $assignment->notification_sent;
-                $notification_sent++;
-
-                $assignment->update([
-                    'notification_sent' => $notification_sent,
-                ]);
             }
         }
 
