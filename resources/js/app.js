@@ -45,6 +45,8 @@ document
             await fetch('/api/fcm-token', {
                 method: 'POST',
 
+                credentials: 'same-origin',
+
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN':

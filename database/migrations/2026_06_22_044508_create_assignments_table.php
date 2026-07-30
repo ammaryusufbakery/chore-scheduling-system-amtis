@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('schedule_id');
             $table->integer('week');
             $table->integer('status')->default(0);
+            $table->integer('notification_sent')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -8,8 +8,8 @@ class FcmToken extends Model
 {
     protected $fillable = [
         'user_id',
-        'device_id',
         'token',
+        'device',
     ];
 
     public function user()

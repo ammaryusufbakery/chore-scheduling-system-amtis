@@ -13,6 +13,7 @@
         "erag/laravel-pwa": "^2.1",
         "google/auth": "^1.53",
         "guzzlehttp/guzzle": "^7.15",
+        "kreait/firebase-php": "^8.3",
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0"
     },

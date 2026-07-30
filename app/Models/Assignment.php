@@ -15,6 +15,7 @@ class Assignment extends Model
         'schedule_id',
         'week',
         'status',
+        'notification_sent',
     ];
 
     public function junior()

@@ -7,6 +7,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+use App\Services\FirebaseNotificationService;
+use App\Models\FcmToken;
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -55,6 +58,7 @@ Route::middleware('auth')->group(function () {
             ->updateOrCreate(
                 [
                     'token' => $request->token,
+                    // 'user_id' => Auth()->user()->id,
                 ],
                 [
                     'token' => $request->token,
@@ -65,6 +69,31 @@ Route::middleware('auth')->group(function () {
             'success' => true,
         ]);
     });
+
+    // Route::get('/test-notification/{user}', function ($userId, FirebaseNotificationService $firebase) 
+    // {
+    //     $fcmToken = FcmToken::where('user_id', $userId)
+    //         ->where('device', 'mobile')
+    //         ->first();
+
+    //     if (!$fcmToken) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'No mobile FCM token found.',
+    //         ], 404);
+    //     }
+
+    //     $firebase->send(
+    //         $fcmToken->token,
+    //         'Test Notification',
+    //         'This is a test notification from your Laravel PWA.'
+    //     );
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Notification sent.',
+    //     ]);
+    // });
 });
 
 require __DIR__.'/auth.php';
